@@ -15,7 +15,7 @@ const Person = sequelize.define('Person', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  startup: DataTypes.STRING,
+  startUp: DataTypes.STRING,
   email: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -27,7 +27,7 @@ const Person = sequelize.define('Person', {
     unique: true,
   },
   phone: DataTypes.STRING,
-  Password: {
+  password: {
     type: DataTypes.STRING,
     allowNull: false
   },
