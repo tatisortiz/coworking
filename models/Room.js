@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const { sequelize } = require('../config/database');
 
 const Room = sequelize.define('Room', {
   id: {
@@ -19,6 +19,9 @@ const Room = sequelize.define('Room', {
     type: DataTypes.ENUM('meeting', 'office'),
     allowNull: false,
   },
+}, {
+  tableName: 'room',
+  timestamps: false,
 });
 
 module.exports = Room;

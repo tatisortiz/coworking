@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
-const User = require('./User');
+const { sequelize } = require('../config/database');
+const Person = require('./Person');
 const Room = require('./Room');
 
 const Access = sequelize.define('Access', {
@@ -18,9 +18,12 @@ const Access = sequelize.define('Access', {
     type: DataTypes.ENUM('entry', 'exit'),
     allowNull: false,
   },
+}, {
+  tableName: 'access',
+  timestamps: false,
 });
 
-Access.belongsTo(User, { foreignKey: 'userId' });
+Access.belongsTo(Person, { foreignKey: 'personId' });
 Access.belongsTo(Room, { foreignKey: 'roomId' });
 
 module.exports = Access;

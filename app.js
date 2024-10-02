@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const { connectDB } = require('./config/database');
 const authRoutes = require('./routes/auth');
+const accessRoutes = require('./routes/access');
 const cors = require('cors');
 const morgan = require('morgan');
 const http = require('http');
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/access', accessRoutes);
 
 // Ruta raíz
 app.get('/', (req, res) => {
