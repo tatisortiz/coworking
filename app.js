@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const { connectDB } = require('./config/database');
 const authRoutes = require('./routes/auth');
 const accessRoutes = require('./routes/access');
+const personRoutes = require('./routes/person');
 const cors = require('cors');
 const morgan = require('morgan');
 const http = require('http');
@@ -20,7 +21,7 @@ const server = http.createServer(app);
 // Configurar Socket.io
 const io = require('socket.io')(server, {
   cors: {
-    origin: '*', // Ajusta esto según tus necesidades de seguridad
+    origin: '*',
     methods: ['GET', 'POST'],
   },
 });
@@ -37,7 +38,8 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/auth', authRoutes);
-app.use('/api/access', accessRoutes);
+app.use('/api/accesses', accessRoutes);
+app.use('/api/persons', personRoutes);
 
 // Ruta raíz
 app.get('/', (req, res) => {
