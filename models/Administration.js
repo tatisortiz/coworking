@@ -27,6 +27,9 @@ const Administration = sequelize.define('Report', {
     type: DataTypes.JSON,
     allowNull: false,
   },
+}, {
+  tableName: 'reports',
+  timestamps: false,
 });
 
 module.exports = Administration;

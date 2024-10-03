@@ -9,8 +9,7 @@ const administrationRoutes = require('./routes/administration');
 const cors = require('cors');
 const morgan = require('morgan');
 const http = require('http');
-
-dotenv.config();
+const socketSetup = require('./sockets/capacity');
 
 dotenv.config();
 
@@ -19,11 +18,23 @@ connectDB();
 
 const app = express();
 const server = http.createServer(app);
+const io = require('socket.io')(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
+});
+socketSetup(io);
 
 // Middleware
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
+
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
 
 app.use('/api/auth', authRoutes);
 app.use('/api/accesses', accessRoutes);
