@@ -1,4 +1,4 @@
-const Persona = require('../models/Person');
+const Person = require('../models/Person');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
@@ -10,13 +10,13 @@ exports.registerUser = async (req, res) => {
     const { firstName, lastName, startUp, email, dni, phone, password } = req.body;
 
     // Verificar si el usuario ya existe
-    let persona = await Persona.findOne({ where: { email } });
-    if (persona) {
+    let person = await Person.findOne({ where: { email } });
+    if (person) {
       return res.status(400).json({ msg: 'El usuario ya existe' });
     }
 
     // Crear nueva persona
-    persona = await Persona.create({
+    person = await Person.create({
       firstName,
       lastName,
       startUp,
@@ -28,13 +28,13 @@ exports.registerUser = async (req, res) => {
 
     // Hashear la contraseña
     const salt = await bcrypt.genSalt(10);
-    persona.password = await bcrypt.hash(password, salt);
-    await persona.save();
+    person.password = await bcrypt.hash(password, salt);
+    await person.save();
 
     // Generar JWT
     const payload = {
-      persona: {
-        id: persona.id,
+      person: {
+        id: person.id,
       },
     };
 
@@ -59,21 +59,21 @@ exports.authenticateUser = async (req, res) => {
     const { email, password } = req.body;
 
     // Verificar si el usuario existe
-    const persona = await Persona.findOne({ where: { email } });
-    if (!persona) {
+    const person = await Person.findOne({ where: { email } });
+    if (!person) {
       return res.status(400).json({ msg: 'Credenciales inválidas' });
     }
 
     // Verificar la contraseña
-    const isMatch = await bcrypt.compare(password, persona.password);
+    const isMatch = await bcrypt.compare(password, person.password);
     if (!isMatch) {
       return res.status(400).json({ msg: 'Credenciales inválidas' });
     }
 
     // Generar JWT
     const payload = {
-      persona: {
-        id: persona.ID_Persona,
+      person: {
+        id: person.id,
       },
     };
 

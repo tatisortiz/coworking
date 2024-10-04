@@ -15,10 +15,6 @@ exports.getCurrentAccess = async (req, res) => {
       include: [{ model: Room, attributes: ['id', 'roomName'] }],
     });
 
-    if (!access) {
-      return res.status(404).json({ msg: 'No hay acceso actual para esta persona' });
-    }
-
     res.json(access);
   } catch (error) {
     console.error(error.message);
