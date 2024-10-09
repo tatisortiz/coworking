@@ -1,11 +1,15 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const { connectDB } = require('./config/database');
+const authRoutes = require('./routes/auth');
+const accessRoutes = require('./routes/access');
+const personRoutes = require('./routes/person');
+const roomRoutes = require('./routes/room');
+const administrationRoutes = require('./routes/administration');
 const cors = require('cors');
 const morgan = require('morgan');
 const http = require('http');
-
-dotenv.config();
+const socketSetup = require('./sockets/capacity');
 
 dotenv.config();
 
@@ -14,25 +18,29 @@ connectDB();
 
 const app = express();
 const server = http.createServer(app);
-
-// Configurar Socket.io
 const io = require('socket.io')(server, {
   cors: {
-    origin: '*', // Ajusta esto según tus necesidades de seguridad
+    origin: '*',
     methods: ['GET', 'POST'],
   },
 });
+socketSetup(io);
 
 // Middleware
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
-// Middleware para pasar io a las rutas
 app.use((req, res, next) => {
   req.io = io;
   next();
 });
+
+app.use('/api/auth', authRoutes);
+app.use('/api/accesses', accessRoutes);
+app.use('/api/persons', personRoutes);
+app.use('/api/rooms', roomRoutes);
+app.use('/api/administration', administrationRoutes);
 
 // Ruta raíz
 app.get('/', (req, res) => {
